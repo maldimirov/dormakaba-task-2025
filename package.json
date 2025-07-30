@@ -1,0 +1,32 @@
+{
+  "name": "dormakaba-task-2025",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "An interview task for Dormakaba",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maldimirov/dormakaba-task-2025.git"
+  },
+  "author": "Marin Aldimirov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maldimirov/dormakaba-task-2025/issues"
+  },
+  "homepage": "https://github.com/maldimirov/dormakaba-task-2025#readme",
+  "devDependencies": {
+    "@aws-sdk/client-s3": "^3.806.0",
+    "@types/aws-lambda": "^8.10.152",
+    "@types/jest": "^30.0.0",
+    "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.3",
+    "jest": "^30.0.5",
+    "prettier": "^3.6.2",
+    "ts-jest": "^29.4.0",
+    "typescript": "^5.8.3"
+  }
+}
