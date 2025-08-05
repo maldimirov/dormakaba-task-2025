@@ -1,0 +1,36 @@
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: dormakaba-2025
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-west-1
+
+functions:
+  certificate-processor:
+    handler: './src/index.handler'
+    events:
+      - s3:
+          bucket: dormakaba-certificates-bucket
+          event: s3:ObjectCreated:*
+
+resources: # CloudFormation template syntax from here on.
+  Resources:
+    signedPubKeyTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: signedPubKeyTable
+        AttributeDefinitions:
+          - AttributeName: commonName
+            AttributeType: S
+        KeySchema:
+          - AttributeName: commonName
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+plugins:
+  - serverless-plugin-typescript
