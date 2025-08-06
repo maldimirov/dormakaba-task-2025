@@ -5,7 +5,10 @@
   "description": "An interview task for Dormakaba",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "login": "sls login",
+    "deploy": "sls deploy",
+    "invoke:local": "sls invoke local --function CertificateProcessorFunction --path tools/events/s3event.json"
   },
   "repository": {
     "type": "git",
