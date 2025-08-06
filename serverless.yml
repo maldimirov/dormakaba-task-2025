@@ -7,10 +7,17 @@ provider:
   name: aws
   runtime: nodejs20.x
   region: eu-west-1
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 's3:GetObject'
+      Resource: arn:aws:s3:::dormakaba-certificates-bucket/*
 
 functions:
   certificate-processor:
-    handler: './src/index.handler'
+    handler: './app.handler'
+    environment:
+      DYNAMO_TABLE: signedPubKeyTable
     events:
       - s3:
           bucket: dormakaba-certificates-bucket

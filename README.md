@@ -1,8 +1,19 @@
 ## Description
 
-- uses serverless
+- uses serverless ??? does it still
 
 ## Setup
+
+### 0. Prerequisites
+
+In order to deploy and run this project you must have the following:
+
+- Node.JS v22.x
+- An active AWS account
+- A IAM User with the rights to deploy infrastructure and run lambdas
+- A pair of `Access Key ID` and `Secret Access Key` issued for that user
+- AWS CLI installed
+- AWS SAM CLI installed
 
 ### 1. NPM
 
@@ -12,23 +23,15 @@ Install the project dependencies using
 npm i
 ```
 
-### 2. AWS
+### 2. Configure AWS credentials
 
-#### Using a credentials file
-
-Setup your AWS credentials using this script
+Setup your AWS credentials using this script and fill the values when asked
 
 ```bash
-touch ~/.aws/credentials
-echo "[default]" >> ~/.aws/credentials
-echo "aws_access_key_id = <your access key id>" >> ~/.aws/credentials
-echo "aws_secret_access_key = <your secret access key>" >> ~/.aws/credentials
-
+ aws configure
 ```
 
-Note that if you already have a credentials file, that might mess it up. So be careful when running the script.
-
-#### Other
+#### Other authentication methods
 
 If you prefer another way refer to [the docs](https://docs.aws.amazon.com/sdkref/latest/guide/standardized-credentials.html#credentialProviderChain).
 

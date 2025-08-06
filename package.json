@@ -18,9 +18,9 @@
   },
   "homepage": "https://github.com/maldimirov/dormakaba-task-2025#readme",
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.806.0",
     "@types/aws-lambda": "^8.10.152",
     "@types/jest": "^30.0.0",
+    "esbuild": "^0.25.8",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.3",
@@ -30,5 +30,9 @@
     "serverless-plugin-typescript": "^2.1.5",
     "ts-jest": "^29.4.0",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.806.0",
+    "@aws-sdk/client-dynamodb": "^3.859.0"
   }
 }
