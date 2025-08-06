@@ -3,9 +3,9 @@ import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { S3CreateEvent } from 'aws-lambda';
 import {
   X509Certificate,
-  createPrivateKey,
+  generateKeyPairSync,
   sign,
-  KeyObject,
+  SignPrivateKeyInput,
 } from 'node:crypto';
 import { promisify } from 'util';
 
@@ -73,7 +73,7 @@ export function extractCommonName(x509Subject: string): string {
     throw new Error('Could not extract CommonName from x509 Subject line');
   }
 
-  return commonName;
+  return commonName.replace('CN=', '');
 }
 
 /** Parses a x509 certificate and extracts the Public Key and Subject */
@@ -92,40 +92,34 @@ export function parseCertificate(certificate: string): ParsedCertificate {
 }
 
 /** Generates a Private Key based on the provided algorithm */
-export function generatePrivKey(algorithm: 'rsa'): KeyObject {
-  const privKey = createPrivateKey({
-    key: '',
-    type: 'pkcs8',
-    format: 'pem',
+export function generatePrivKey(algorithm: 'rsa'): string {
+  const { privateKey } = generateKeyPairSync(algorithm, {
+    modulusLength: 4096,
+    publicKeyEncoding: {
+      type: 'spki',
+      format: 'pem',
+    },
+    privateKeyEncoding: {
+      type: 'pkcs8',
+      format: 'pem',
+      cipher: 'aes-256-cbc',
+      passphrase: 'password',
+    },
   });
 
-  // const { privateKey } = await generateKeyPairPromise(algorithm, {
-  //   modulusLength: 4096,
-  //   publicKeyEncoding: {
-  //     type: 'spki',
-  //     format: 'pem',
-  //   },
-  //   privateKeyEncoding: {
-  //     type: 'pkcs8',
-  //     format: 'pem',
-  //     cipher: 'aes-256-cbc',
-  //     passphrase: 'top secret',
-  //   },
-  // });
-
-  return privKey;
+  return privateKey;
 }
 
-export async function signWithPrivKey(
-  privKey: KeyObject,
-  payload: string,
-): Promise<string> {
-  // const signPromise = promisify(sign);
+export function signWithPrivKey(privKey: string, data: string): Buffer {
+  const privKeyInput: SignPrivateKeyInput = {
+    key: privKey,
+    format: 'pem',
+    type: 'pkcs8',
+    passphrase: 'password',
+  };
+  const signedPayload = sign(null, Buffer.from(data), privKeyInput);
 
-  // const signedPayload = await signPromise(null, Buffer.from(payload), privKey);
-  const signedPayload = sign(null, Buffer.from(payload), privKey);
-
-  return signedPayload.toString();
+  return signedPayload;
 }
 
 export async function writeToDynamo(
@@ -149,13 +143,10 @@ export const handler = async (event: S3CreateEvent) => {
   const certificate = await getS3FileBody(parsedEvent);
   const parsedCert = parseCertificate(certificate);
   const privKey = generatePrivKey('rsa');
-  console.log('PRIVATE KEY', privKey.export().toString());
+  const signedPubKey = signWithPrivKey(privKey, parsedCert.pubKey);
+  const signedPubKeyHex = signedPubKey.toString('hex');
 
-  // const signedPubKey = await signWithPrivKey(privKey, parsedCert.pubKey);
-  const signedPubKey = 'await signWithPrivKey(privKey, parsedCert.pubKey);';
+  console.log('SIGNED PUB KEY:', signedPubKeyHex);
 
-  console.log('PARSED CERTIFICATE:', parsedCert);
-  console.log('SIGNED PUB KEY:', signedPubKey);
-
-  await writeToDynamo(parsedCert.commonName, signedPubKey);
+  await writeToDynamo(parsedCert.commonName, signedPubKeyHex);
 };
