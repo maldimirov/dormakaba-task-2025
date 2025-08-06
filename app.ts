@@ -145,8 +145,7 @@ export const handler = async (event: S3CreateEvent) => {
   const privKey = generatePrivKey('rsa');
   const signedPubKey = signWithPrivKey(privKey, parsedCert.pubKey);
   const signedPubKeyHex = signedPubKey.toString('hex');
-
-  console.log('SIGNED PUB KEY:', signedPubKeyHex);
-
   await writeToDynamo(parsedCert.commonName, signedPubKeyHex);
+
+  console.log('SUCCESS');
 };

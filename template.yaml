@@ -15,7 +15,6 @@ Resources:
     Type: 'AWS::Serverless::Function'
     Properties:
       FunctionName: certificate-processor-function-sam
-      PackageType: Zip
       Architectures:
         - x86_64
       Handler: app.handler
@@ -32,7 +31,11 @@ Resources:
             - Effect: Allow
               Action:
                 - 's3:GetObject'
-              Resource: 'arn:aws:s3:::*'
+              Resource:
+                'Fn::Join':
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - Ref: CertificatesBucket
             - Effect: Allow
               Action:
                 - 'dynamodb:PutItem'
@@ -62,6 +65,9 @@ Resources:
         Sourcemap: true
         EntryPoints:
           - app.ts
+        External:
+          - '@aws-sdk/*'
+          - '@types/*'
 
   CertificatesBucket:
     Type: 'AWS::S3::Bucket'
@@ -73,5 +79,5 @@ Resources:
     Properties:
       TableName: pubkey-table-sam
       PrimaryKey:
-        Type: S
+        Type: String
         Name: common-name
