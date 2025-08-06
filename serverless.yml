@@ -11,24 +11,29 @@ provider:
     - Effect: 'Allow'
       Action:
         - 's3:GetObject'
-      Resource: arn:aws:s3:::dormakaba-certificates-bucket/*
+      Resource: arn:aws:s3:::certificates-bucket-serverless/*
+    - Effect: 'Allow'
+      Action:
+        - 'dynamodb:PutItem'
+      Resource: arn:aws:dynamodb:eu-west-1:098588167309:table/pubkey-table-serverless
 
 functions:
-  certificate-processor:
+  CertificateProcessorFunction:
+    name: certificate-processor-function-serverless
     handler: './app.handler'
     environment:
-      DYNAMO_TABLE: signedPubKeyTable
+      DYNAMO_TABLE: pubkey-table-serverless
     events:
       - s3:
-          bucket: dormakaba-certificates-bucket
+          bucket: certificates-bucket-serverless
           event: s3:ObjectCreated:*
 
 resources: # CloudFormation template syntax from here on.
   Resources:
-    signedPubKeyTable:
+    PubkeyTableServerless:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: signedPubKeyTable
+        TableName: pubkey-table-serverless
         AttributeDefinitions:
           - AttributeName: commonName
             AttributeType: S
