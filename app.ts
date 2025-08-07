@@ -7,11 +7,17 @@ import {
   sign,
   SignPrivateKeyInput,
 } from 'node:crypto';
-import { promisify } from 'util';
 
-const s3 = new S3();
-const dynamo = new DynamoDBClient();
 const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
+
+var s3: S3;
+var dynamo: DynamoDBClient;
+
+// Not the prettiest solution, but for the sake of tests and properly mocking we do, what we have to
+export function init() {
+  s3 = new S3();
+  dynamo = new DynamoDBClient();
+}
 
 export type ParsedS3CreateEvent = {
   bucket: string;
@@ -139,6 +145,8 @@ export async function writeToDynamo(
 
 /** The actual lambda handler */
 export const handler = async (event: S3CreateEvent) => {
+  init();
+
   const parsedEvent = parseS3CreateEvent(event);
   const certificate = await getS3FileBody(parsedEvent);
   const parsedCert = parseCertificate(certificate);

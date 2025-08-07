@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`getS3FileBody fails if body cannot transform to string 1`] = `"Failed to fetch S3 file: transformToString fail"`;
+
+exports[`getS3FileBody fails if body is empty 1`] = `"Failed to fetch S3 file: couldn't decode body for bucket bucket1 and key key1"`;
+
+exports[`getS3FileBody fails if getObject fails 1`] = `"Failed to fetch S3 file: getObject fail"`;

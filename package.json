@@ -5,7 +5,7 @@
   "description": "An interview task for Dormakaba",
   "main": "index.js",
   "scripts": {
-    "test": "test",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "login": "sls login",
     "deploy": "sls deploy",
     "invoke:local": "sls invoke local --function CertificateProcessorFunction --path tools/events/s3event.json"
@@ -21,8 +21,9 @@
   },
   "homepage": "https://github.com/maldimirov/dormakaba-task-2025#readme",
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.806.0",
     "@aws-sdk/client-dynamodb": "^3.859.0",
+    "@aws-sdk/client-s3": "^3.806.0",
+    "@jest/globals": "^30.0.5",
     "@types/aws-lambda": "^8.10.152",
     "@types/jest": "^30.0.0",
     "esbuild": "^0.25.8",
@@ -33,7 +34,8 @@
     "prettier": "^3.6.2",
     "serverless": "^3.40.0",
     "serverless-plugin-typescript": "^2.1.5",
-    "ts-jest": "^29.4.0",
+    "ts-jest": "^29.4.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
 }
