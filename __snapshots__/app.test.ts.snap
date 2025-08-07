@@ -1,7 +1,55 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`extractCommonName fails if cannot extract common name 1`] = `"Could not extract CommonName from x509 Subject line"`;
+
 exports[`getS3FileBody fails if body cannot transform to string 1`] = `"Failed to fetch S3 file: transformToString fail"`;
 
 exports[`getS3FileBody fails if body is empty 1`] = `"Failed to fetch S3 file: couldn't decode body for bucket bucket1 and key key1"`;
 
 exports[`getS3FileBody fails if getObject fails 1`] = `"Failed to fetch S3 file: getObject fail"`;
+
+exports[`parseCertificate ok 1`] = `
+"-----BEGIN RSA PUBLIC KEY-----
+MIIBCgKCAQEAoSu1Vn+hkXcPId0f2DQq8ral9r/KQ+iMeYAb0STPJo0zJJAAt93/
+dYKAiu+KiLNNfWIXOp4YOCm558duXZbR8Be4IEN2Nb5PLv2TvB9PjIEu1Rl8hRDW
+0pXdQUUBEoMAcDBeZKzMgYirIkyCkLS1mkgNKOpwvN5/rg9krsCfYq+7HNIrJECk
+bCz1CdPsU1H+acRCV0aidoNF0l5o81OgyapXhBFJWjFkq2pUhdVEnjFag20kDoOd
+hDh1k6C/laSeh5uSvDrsFJkEjJXsscEAh9azLWN/2C5LnA294YlzoH8GGVB/TJNG
+pp3HcZC7Of3ifus3RVhxoRstkQzKU0BIfwIDAQAB
+-----END RSA PUBLIC KEY-----
+"
+`;
+
+exports[`writeToDynamo fails if dynamo write fails 1`] = `"dynamo write failed"`;
+
+exports[`writeToDynamo ok 1`] = `
+PutItemCommand {
+  "deserialize": [Function],
+  "input": {
+    "Item": {
+      "commonName": {
+        "S": "commonName",
+      },
+      "signedPubKey": {
+        "S": "signedPubKey",
+      },
+    },
+    "TableName": "dynamo_table",
+  },
+  "middlewareStack": {
+    "add": [Function],
+    "addRelativeTo": [Function],
+    "applyToStack": [Function],
+    "clone": [Function],
+    "concat": [Function],
+    "identify": [Function],
+    "identifyOnResolve": [Function],
+    "remove": [Function],
+    "removeByTag": [Function],
+    "resolve": [Function],
+    "use": [Function],
+  },
+  "schema": undefined,
+  "serialize": [Function],
+}
+`;

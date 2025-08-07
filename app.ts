@@ -8,13 +8,13 @@ import {
   SignPrivateKeyInput,
 } from 'node:crypto';
 
-const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
-
+var DYNAMO_TABLE: string | undefined;
 var s3: S3;
 var dynamo: DynamoDBClient;
 
 // Not the prettiest solution, but for the sake of tests and properly mocking we do, what we have to
 export function init() {
+  DYNAMO_TABLE = process.env.DYNAMO_TABLE;
   s3 = new S3();
   dynamo = new DynamoDBClient();
 }
@@ -146,7 +146,6 @@ export async function writeToDynamo(
 /** The actual lambda handler */
 export const handler = async (event: S3CreateEvent) => {
   init();
-
   const parsedEvent = parseS3CreateEvent(event);
   const certificate = await getS3FileBody(parsedEvent);
   const parsedCert = parseCertificate(certificate);
