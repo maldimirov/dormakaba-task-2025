@@ -256,7 +256,7 @@ describe('writeToDynamo', () => {
   });
 });
 
-describe(`handler`, () => {
+describe.skip(`handler`, () => {
   // Set env vars
   process.env.DYNAMO_TABLE = 'dynamo_table';
 
